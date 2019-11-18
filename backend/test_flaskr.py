@@ -50,27 +50,27 @@ class TriviaTestCase(unittest.TestCase):
     Write at least one test for each test for successful operation and for expected errors.
     """
     def test_get_categories_with_success_response(self):
-    """
-        Test getting all categories with a success response
-    """
+        """
+            Test getting all categories with a success response
+        """
         response = self.client().get("/api/categories")
         data = json.loads(response.data)
         self.assertTrue(response.status_code, 200)
         self.assertTrue(data['success'], True)
 
     def test_get_questions_with_success_response(self):
-    """
-        Test getting all questions with a success response
-    """
+        """
+            Test getting all questions with a success response
+        """
         response = self.client().get('/api/questions')
         data = json.loads(response.data)
         self.assertTrue(response.status_code, 200)
         self.assertTrue(data['success'], True)
 
     def test_get_questions_with_failure_response(self):
-    """
-        Test getting unavailable questions from the database
-    """
+        """
+            Test getting unavailable questions from the database
+        """
         question = Question.query.first()
         question.delete()
         response = self.client().get('/api/questions')
@@ -79,9 +79,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
 
     def test_delete_a_questions_with_success_response(self):
-    """
-        Test deleting an existing question from the database
-    """
+        """
+            Test deleting an existing question from the database
+        """
         question_id = Question.query.first().id
         response = self.client().delete(f"/api/questions/{question_id}")
         data = json.loads(response.data)
@@ -90,9 +90,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Question successfully deleted')
 
     def test_delete_a_questions_with_failure_response(self):
-    """
-        Test deleting an unexisting question from the database
-    """
+        """
+            Test deleting an unexisting question from the database
+        """
         question_id = Question.query.first().id
         response = self.client().delete(f"/api/questions/{question_id + 1}")
         data = json.loads(response.data)
@@ -101,9 +101,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Resource not found')
 
     def test_get_questions_of_given_category_with_success_response(self):
-    """
-        Test getting all questions of a given category id
-    """
+        """
+            Test getting all questions of a given category id
+        """
         category_id = Category.query.first().id
         response = self.client().get(f"/api/categories/{category_id}/questions")
         data = json.loads(response.data)
@@ -112,9 +112,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['total_questions'], 1)
 
     def test_get_questions_of_given_category_with_failure_response(self):
-    """
-        Test getting all questions of an unexisting category
-    """
+        """
+            Test getting all questions of an unexisting category
+        """
         category_id = Category.query.first().id
         response = self.client().get(f"/api/categories/{category_id + 1}/questions")
         data = json.loads(response.data)
@@ -123,9 +123,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Resource not found')
 
     def test_create_a_question_with_success_response(self):
-    """
-        Test creating a question with all required fields and required request method
-    """
+        """
+            Test creating a question with all required fields and required request method
+        """
         response = self.client().post('/api/questions',
             content_type='application/json',
             data=json.dumps(
@@ -143,9 +143,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Question successfully added')
 
     def test_create_a_question_with_failure_response(self):
-    """
-        Test creating a question with a wrong request url
-    """
+        """
+            Test creating a question with a wrong request url
+        """
         response = self.client().post('/api/questions/2',
             content_type='application/json',
             data=json.dumps(
@@ -163,9 +163,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Method not allowed')
 
     def test_search_a_question_with_success_response(self):
-    """
-        Test searching a question using a correct search term.
-    """
+        """
+            Test searching a question using a correct search term.
+        """
         search_term = 'four'
         response = self.client().post('/api/questions/search',
             content_type='application/json',
@@ -177,9 +177,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['total_questions'], 1)
 
     def test_search_a_question_with_failure_response(self):
-    """
-        Test searching a question using a wrong search term.
-    """
+        """
+            Test searching a question using a wrong search term.
+        """
         search_term = 'fred'
         response = self.client().post('/api/questions/search',
             content_type='application/json',
@@ -191,9 +191,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Resource not found')
 
     def test_get_quiz_question_with_success_response(self):
-    """
-        Test playing a quiz category and previous question parameters.
-    """
+        """
+            Test playing a quiz category and previous question parameters.
+        """
         response = self.client().post('/api/quizzes',
             content_type='application/json',
             data=json.dumps({'previous_questions': [], 'quiz_category': {'id': 0, 'type': 'all'}}
@@ -205,9 +205,9 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['question'])
 
     def test_get_quiz_question_with_failure_response(self):
-    """
-        Test playing a quiz category a wrong request method.
-    """
+        """
+            Test playing a quiz category a wrong request method.
+        """
         response = self.client().get('/api/quizzes')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 405)
